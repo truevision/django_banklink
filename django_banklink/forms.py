@@ -25,13 +25,16 @@ class PaymentRequest(forms.Form):
         initial['VK_RETURN'] = kwargs.get('return_to')
         initial['VK_SERVICE'] = '1002'
         initial['VK_VERSION'] = '008'
+        initial['VK_LANG'] = kwargs.get('language', 'LAT')
         initial['VK_SND_ID'] = settings.SND_ID
         initial['VK_MAC'] = create_signature(initial)
         super(PaymentRequest, self).__init__(initial, *args)
-    def as_html(self):
-        html = u'<form action="%s" method="POST" enctype="multipart/form-data">' % (settings.BANKLINK_URL)
+    def as_html(self, with_submit = False, id = "banklink_payment_form"):
+        html = u'<form action="%s" method="POST" id="%s">' % (settings.BANKLINK_URL, id)
         for field in self:
-            html += unicode(field)
+            html += unicode(field) + u"\n"
+        if with_submit:
+            html += '<input type="submit" />'
         html += '</form>'
         return html 
 
