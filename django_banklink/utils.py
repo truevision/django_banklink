@@ -1,5 +1,7 @@
 from M2Crypto import EVP
 from django_banklink import settings
+from base64 import b64encode
+from base64 import b64decode 
 
 def get_ordered_request(request):
     def append_if_exists(target, source, value):
@@ -24,7 +26,7 @@ def get_ordered_request(request):
     ordered_request = []
     for value in expected_values:
         append_if_exists(ordered_request, request, value)
-    return order_request
+    return ordered_request
 def request_digest(request):
     """ 
         return request digest in Banklink signature form (see docs for format)
@@ -34,7 +36,6 @@ def request_digest(request):
     for value in request:
         digest += str(len(value)).rjust(3, '0')
         digest += str(value)
-    print digest
     return digest
 
 def create_signature(request):
@@ -48,9 +49,7 @@ def create_signature(request):
     key.sign_init()
     key.sign_update(digest)
     key_binary = key.sign_final()
-    
-    b21 = key_binary.encode('base64').strip()
-    print b21
+    b21 = b64encode(key_binary)
     return b21 
 
 def verify_signature(request, signature):
@@ -61,7 +60,7 @@ def verify_signature(request, signature):
     pubkey = EVP.load_key(settings.PUBLIC_KEY)
     pubkey.verify_init()
     pubkey.verify_update(request_digest(request))
-    if pubkey.verify_final(signature.decode('base64')) == 1:
+    if pubkey.verify_final(b64decode(signature)) == 1:
         return True
     else:
         return False
