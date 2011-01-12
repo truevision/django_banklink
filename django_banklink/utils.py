@@ -36,6 +36,7 @@ def request_digest(request):
     for value in request:
         digest += str(len(value)).rjust(3, '0')
         digest += str(value)
+    print digest
     return digest
 
 def create_signature(request):
