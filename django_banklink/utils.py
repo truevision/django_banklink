@@ -1,4 +1,7 @@
 from M2Crypto import EVP
+from M2Crypto import RSA
+from M2Crypto import X509
+
 from django_banklink import settings
 from base64 import b64encode
 from base64 import b64decode 
@@ -59,7 +62,8 @@ def verify_signature(request, signature):
         verify BankLink reply signature
     """
     signature = unicode(signature)
-    pubkey = EVP.load_key(settings.PUBLIC_KEY)
+    cert = X509.load_cert(settings.PUBLIC_KEY)
+    pubkey = cert.get_pubkey()
     pubkey.verify_init()
     pubkey.verify_update(request_digest(request))
     if pubkey.verify_final(b64decode(signature)) == 1:
