@@ -7,6 +7,7 @@ def get_ordered_request(request):
     def append_if_exists(target, source, value):
         if value in source:
             target.append(source[value])
+        return target
     expected_values = ('VK_SERVICE',
                         'VK_VERSION',
                         'VK_SND_ID',
@@ -21,11 +22,11 @@ def get_ordered_request(request):
                         'VK_SND_NAME',
                         'VK_REF',
                         'VK_MSG',
-                        'VK_T_DATE',),
+                        'VK_T_DATE',)
 
     ordered_request = []
     for value in expected_values:
-        append_if_exists(ordered_request, request, value)
+        ordered_request = append_if_exists(ordered_request, request, value)
     return ordered_request
 def request_digest(request):
     """ 
@@ -34,6 +35,7 @@ def request_digest(request):
     request = get_ordered_request(request)
     digest = r''
     for value in request:
+        
         digest += str(len(value)).rjust(3, '0')
         digest += str(value)
     return digest
