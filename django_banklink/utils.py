@@ -2,15 +2,29 @@ from M2Crypto import EVP
 from django_banklink import settings
 
 def get_ordered_request(request):
-    return (request['VK_SERVICE'],
-            request['VK_VERSION'],
-            request['VK_SND_ID'],
-            request['VK_STAMP'],
-            request['VK_AMOUNT'],
-            request['VK_CURR'],
-            request['VK_REF'],
-            request['VK_MSG'])
+    def append_if_exists(target, source, value):
+        if value in source:
+            target.append(source[value])
+    expected_values = ('VK_SERVICE',
+                        'VK_VERSION',
+                        'VK_SND_ID',
+                        'VK_REC_ID',
+                        'VK_STAMP',
+                        'VK_T_NO',
+                        'VK_AMOUNT',
+                        'VK_CURR',
+                        'VK_REC_ACC',
+                        'VK_REC_NAME',
+                        'VK_SND_ACC',
+                        'VK_SND_NAME',
+                        'VK_REF',
+                        'VK_MSG',
+                        'VK_T_DATE',),
 
+    ordered_request = []
+    for value in expected_values:
+        append_if_exists(ordered_request, request, value)
+    return order_request
 def request_digest(request):
     """ 
         return request digest in Banklink signature form (see docs for format)
