@@ -1,7 +1,7 @@
 from distutils.core import setup 
 setup(
     name = "django-banklink",
-    packages = ["banklink"],
+    packages = ["django_banklink"],
     version = "0.11",
     description = "django application for Swedbank payment gateway",
     author = "Kristaps Kulis",
