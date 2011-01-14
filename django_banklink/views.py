@@ -6,6 +6,7 @@ from django_banklink.utils import verify_signature
 from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def test_response(request):
     if request.method == 'POST':
         data = request.POST
@@ -18,7 +19,6 @@ def test_response(request):
     context['data'] = data
     return render_to_response("django_banklink/test_response.html", context)
 
-@csrf_exempt
 def test_request(request):
     context = RequestContext(request)
     url= "http://%s%s" % (request.META['HTTP_HOST'], reverse(test_response))
