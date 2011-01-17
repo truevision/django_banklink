@@ -11,6 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django_banklink.forms import PaymentRequest
 from django_banklink.utils import verify_signature
 from django_banklink.models import Transaction
+from django_banklink.signals import transaction_succeeded
+from django_banklink.signals import transaction_failed
 
 @csrf_exempt
 def response(request):
@@ -27,12 +29,14 @@ def response(request):
     if data['VK_AUTO'] == 'Y':
         transaction.status = 'C'
         transaction.save()
+        transaction_succeeded.send(Transaction, transaction = transaction)
         return HttResponse("request handled, swedbank")
     else:
         if data['VK_SERVICE'] == '1901':
             url = transaction.redirect_on_failure
             transaction.status = 'F'
             transaction.save()
+            transaction_failed.send(Transaction, transaction = transaction)
         else:
             url = transaction.redirect_on_success 
         return HttpResponseRedirect(url)

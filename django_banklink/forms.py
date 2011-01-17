@@ -3,6 +3,7 @@ from django_banklink import settings
 from django_banklink.utils import create_signature
 from django_banklink.models import Transaction
 from warnings import warn
+from django_banklink.signals import transaction_started
 
 class PaymentRequest(forms.Form):
     VK_SERVICE = forms.CharField(widget = forms.HiddenInput())
@@ -34,6 +35,7 @@ class PaymentRequest(forms.Form):
         transaction.redirect_after_success = kwargs.get('redirect_to')
         transaction.redirect_on_failure = kwargs.get('redirect_on_failure', transaction.redirect_after_success)
         transaction.save()
+        transaction_started.send(Transaction, transaction = transaction)
         self.transaction = transaction
         initial['VK_REF'] = transaction.pk 
         super(PaymentRequest, self).__init__(initial, *args)
