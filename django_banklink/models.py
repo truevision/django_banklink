@@ -19,6 +19,8 @@ class Transaction(models.Model):
     last_modified = models.DateTimeField(auto_now = True)
     status = models.CharField(_("status"), max_length = 1, default = 'P')
     redirect_after_success = models.CharField(max_length = 255, editable = False)
+    redirect_on_failure = models.CharField(max_length = 255, editable = False)
+
     def __unicode__(self):
         return _("transaction %s " % self.pk)
     class Meta:

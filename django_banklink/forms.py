@@ -31,6 +31,7 @@ class PaymentRequest(forms.Form):
         initial['VK_LANG'] = kwargs.get('language', 'LAT')
         initial['VK_SND_ID'] = settings.SND_ID
         transaction.redirect_after_success = kwargs.get('redirect_to')
+        transaction.redirect_on_failure = kwargs.get('redirect_on_failure', transaction.redirect_after_success)
         transaction.save()
         initial['VK_REF'] = transaction.pk 
         super(PaymentRequest, self).__init__(initial, *args)
