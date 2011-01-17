@@ -31,7 +31,7 @@ class PaymentRequest(forms.Form):
         transaction.currency = initial['VK_CURR'] = kwargs.get('currency', 'LVL')
         transaction.message = initial['VK_MSG'] = kwargs.get('message')
         initial['VK_ENCODING'] = 'UTF-8'
-        initial['VK_RETURN'] = "https://%s%s" % (Site.objects.get_current().domain, reverse('django_banklink.views.reverse'))
+        initial['VK_RETURN'] = "https://%s%s" % (Site.objects.get_current().domain, reverse('django_banklink.views.response'))
         initial['VK_SERVICE'] = '1002'
         initial['VK_VERSION'] = '008'
         initial['VK_LANG'] = kwargs.get('language', 'LAT')
