@@ -2,7 +2,7 @@ from distutils.core import setup
 setup(
     name = "django-banklink",
     packages = ["django_banklink"],
-    version = "0.11",
+    version = "0.12",
     description = "django application for Swedbank payment gateway",
     author = "Kristaps Kulis",
     author_email = "kristaps.kulis@gmail.com",
