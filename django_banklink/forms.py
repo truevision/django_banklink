@@ -61,6 +61,12 @@ class PaymentRequest(forms.Form):
                     document.forms['banklink_redirect_url'].submit();
                     </script>'''
         return html
+    def submit_button(self, value = u"Apmaksāt"):
+        html = u'<form action="%s" method="POST">' % (settings.BANKLINK_URL)
+        for field in self:
+            html += unicode(field) + u"\n"
+        html += '<input type="submit" value="%s" />' % (value)
+        html += '</form>'
     def as_html(self, with_submit = False, id = "banklink_payment_form", submit_value = "submit" ):
         """ return transaction form for redirect to HanzaNet """
         warn("deprecated", DeprecationWarning)
