@@ -1,9 +1,13 @@
 from django import forms 
+from django.core.urlresolvers import reverse 
+from django.contrib.sites.models import Site
 from django_banklink import settings
 from django_banklink.utils import create_signature
 from django_banklink.models import Transaction
 from warnings import warn
 from django_banklink.signals import transaction_started
+
+
 
 class PaymentRequest(forms.Form):
     VK_SERVICE = forms.CharField(widget = forms.HiddenInput())
@@ -27,7 +31,7 @@ class PaymentRequest(forms.Form):
         transaction.currency = initial['VK_CURR'] = kwargs.get('currency', 'LVL')
         transaction.message = initial['VK_MSG'] = kwargs.get('message')
         initial['VK_ENCODING'] = 'UTF-8'
-        initial['VK_RETURN'] = kwargs.get('return_to')
+        initial['VK_RETURN'] = "https://%s%s" % (Site.objects.get_current().domain, reverse('django_banklink.views.reverse'))
         initial['VK_SERVICE'] = '1002'
         initial['VK_VERSION'] = '008'
         initial['VK_LANG'] = kwargs.get('language', 'LAT')
