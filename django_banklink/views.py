@@ -51,5 +51,4 @@ def request(request, description, message, amount, currency, redirect_to):
                                      return_to = url,
                                      message = message,
                                      user = user)
-    return render_to_response("django_banklink/request.html")
-
+    return render_to_response("django_banklink/request.html", context)
