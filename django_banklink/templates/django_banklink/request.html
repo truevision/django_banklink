@@ -4,9 +4,6 @@
         <meta http-equiv="Content-Type" value="text/html; charset=utf-8" />
     </head>
     <body>
-        {{ form.as_html|safe }}
-        <script type="text/javascript">
-            document.forms['banklink_payment_form'].submit();
-        </script>
+        {{ form.redirect_html|safe }}
     </body>
 </html>

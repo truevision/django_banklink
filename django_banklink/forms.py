@@ -2,6 +2,7 @@ from django import forms
 from django_banklink import settings
 from django_banklink.utils import create_signature
 from django_banklink.models import Transaction
+from warnings import warn
 
 class PaymentRequest(forms.Form):
     VK_SERVICE = forms.CharField(widget = forms.HiddenInput())
@@ -33,6 +34,7 @@ class PaymentRequest(forms.Form):
         transaction.redirect_after_success = kwargs.get('redirect_to')
         transaction.redirect_on_failure = kwargs.get('redirect_on_failure', transaction.redirect_after_success)
         transaction.save()
+        self.transaction = transaction
         initial['VK_REF'] = transaction.pk 
         super(PaymentRequest, self).__init__(initial, *args)
         if self.is_valid():
@@ -42,8 +44,20 @@ class PaymentRequest(forms.Form):
                 raise RuntimeError("signature is invalid")
         else:
             raise RuntimeError("invalid initial data")
+
+    def redirect_html(self):
+        """ Hanzanet redirection html"""
+        html = u'<form action="%s" method="POST" id="banklink_redirect_url">' % (settings.BANKLINK_URL)
+        for field in self:
+            html += unicode(field) + u"\n"
+        html += u'</form>'
+        html += u'''<script type="text/javascript">
+                    document.forms['banklink_redirect_url'].submit();
+                    </script>'''
+        return html
     def as_html(self, with_submit = False, id = "banklink_payment_form", submit_value = "submit" ):
         """ return transaction form for redirect to HanzaNet """
+        warn("deprecated", DeprecationWarning)
         html = u'<form action="%s" method="POST" id="%s">' % (settings.BANKLINK_URL, id)
         for field in self:
             html += unicode(field) + u"\n"
