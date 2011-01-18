@@ -5,7 +5,7 @@ setup(
     version = "0.12",
     description = "django application for Swedbank payment gateway",
     author = "Kristaps Kulis",
-    author_email = "kristaps.kulis@gmail.com",
+    author_email = "kristaps@true-vision.net",
     url = "http://www.github.com/truevision/django_banklink",
     classifiers = [
         'Development Status :: 2 - Pre-Alpha',
