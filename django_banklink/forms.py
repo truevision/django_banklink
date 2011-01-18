@@ -27,7 +27,7 @@ class PaymentRequest(forms.Form):
         initial = {} 
         transaction = Transaction()
         transaction.user = kwargs.get('user')
-        transaction.description = initial['VK_STAMP'] = kwargs.get('description')
+        transaction.description = kwargs.get('message')
         transaction.amount = initial['VK_AMOUNT'] = kwargs.get('amount')
         transaction.currency = initial['VK_CURR'] = kwargs.get('currency', 'LVL')
         transaction.message = initial['VK_MSG'] = kwargs.get('message')
@@ -43,6 +43,7 @@ class PaymentRequest(forms.Form):
         transaction_started.send(Transaction, transaction = transaction)
         self.transaction = transaction
         initial['VK_REF'] = transaction.pk 
+        initial['VK_STAMP'] = transaction.pk
         super(PaymentRequest, self).__init__(initial, *args)
         if self.is_valid():
             mac = create_signature(self.cleaned_data)
