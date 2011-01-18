@@ -1,6 +1,7 @@
 from django import forms 
 from django.core.urlresolvers import reverse 
 from django.contrib.sites.models import Site
+from django.utils.safestring import SafeUnicode
 from django_banklink import settings
 from django_banklink.utils import create_signature
 from django_banklink.models import Transaction
@@ -60,13 +61,14 @@ class PaymentRequest(forms.Form):
         html += u'''<script type="text/javascript">
                     document.forms['banklink_redirect_url'].submit();
                     </script>'''
-        return html
+        return SafeUnicode(html)
     def submit_button(self, value = u"Apmaksāt"):
         html = u'<form action="%s" method="POST">' % (settings.BANKLINK_URL)
         for field in self:
             html += unicode(field) + u"\n"
         html += '<input type="submit" value="%s" />' % (value)
         html += '</form>'
+        return SafeUnicode(html)
     def as_html(self, with_submit = False, id = "banklink_payment_form", submit_value = "submit" ):
         """ return transaction form for redirect to HanzaNet """
         warn("deprecated", DeprecationWarning)
