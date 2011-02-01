@@ -7,7 +7,7 @@ Django Banklink is Swedbank Banklink payment API wrapper for django.
 Installation
 ============
 
-#. `pip install django_backlink`
+#. `pip install django_banklink`
 #. Add `django_banklink` directory to your Python path 
 #. Add following settings to your project's settings.py
 
