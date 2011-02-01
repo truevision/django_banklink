@@ -38,7 +38,7 @@ def response(request):
             transaction.save()
             transaction_failed.send(Transaction, transaction = transaction)
         else:
-            url = transaction.redirect_on_success 
+            url = transaction.redirect_after_success 
         return HttpResponseRedirect(url)
 
 def request(request, description, message, amount, currency, redirect_to):
